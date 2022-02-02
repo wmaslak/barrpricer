@@ -28,6 +28,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// getBarrierPaths
+Rcpp::NumericVector getBarrierPaths(int nInt, double Strike, double Spot, double Barrier, double Vol, double Rfr, double Expiry, int nReps);
+RcppExport SEXP _barpricer_getBarrierPaths(SEXP nIntSEXP, SEXP StrikeSEXP, SEXP SpotSEXP, SEXP BarrierSEXP, SEXP VolSEXP, SEXP RfrSEXP, SEXP ExpirySEXP, SEXP nRepsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type nInt(nIntSEXP);
+    Rcpp::traits::input_parameter< double >::type Strike(StrikeSEXP);
+    Rcpp::traits::input_parameter< double >::type Spot(SpotSEXP);
+    Rcpp::traits::input_parameter< double >::type Barrier(BarrierSEXP);
+    Rcpp::traits::input_parameter< double >::type Vol(VolSEXP);
+    Rcpp::traits::input_parameter< double >::type Rfr(RfrSEXP);
+    Rcpp::traits::input_parameter< double >::type Expiry(ExpirySEXP);
+    Rcpp::traits::input_parameter< int >::type nReps(nRepsSEXP);
+    rcpp_result_gen = Rcpp::wrap(getBarrierPaths(nInt, Strike, Spot, Barrier, Vol, Rfr, Expiry, nReps));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _barpricer_rcpp_hello_world() {
@@ -41,6 +59,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_barpricer_getBarrierCallPrice", (DL_FUNC) &_barpricer_getBarrierCallPrice, 8},
+    {"_barpricer_getBarrierPaths", (DL_FUNC) &_barpricer_getBarrierPaths, 8},
     {"_barpricer_rcpp_hello_world", (DL_FUNC) &_barpricer_rcpp_hello_world, 0},
     {NULL, NULL, 0}
 };

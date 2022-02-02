@@ -28,17 +28,19 @@ void BarrierOption::generatePath(){
 	double thisDrift = (r * expiry - 0.5 * vol * vol * expiry) / double(nInt);
 	double cumShocks = 0;
 	thisPath.clear();
-
+	// this it to guarantee that the path starts at the spot price
+	// thisPath.push_back(spot * exp(cumShocks));
 	for(int i = 0; i < nInt; i++){
+	  thisPath.push_back(spot * exp(cumShocks));
 		cumShocks += (thisDrift + vol * sqrt(expiry / double(nInt)) * getOneGaussianByBoxMueller());
-		thisPath.push_back(spot * exp(cumShocks));
+
 	}
 }
 
 //method definition
 bool BarrierOption::checkIfOverBarrier(){
   //calculate max element in thisPath and see if is >= barrier
-  double thisMax = *std::min_element(thisPath.begin(), thisPath.end());
+  double thisMax = *std::max_element(thisPath.begin(), thisPath.end());
  
   if (thisMax >= barrier) {
     return true;
@@ -70,7 +72,12 @@ double BarrierOption::getBarrierCallPrice(int nReps){
 		generatePath();
 		isThisPathActive=checkIfOverBarrier();
 		//std::cout << isThisPathActive << "\n";
-		rollingSum += ( (isThisPathActive) && (thisPath[nInt-1] > strike) ) ? (thisPath[nInt-1]-strike) : 0;
+		if(isThisPathActive){
+		    rollingSum += ( (thisPath.back() > strike) ) ? (thisPath.back()-strike) : 0;
+		}else{
+		    continue;
+		  }
+		
 	}
 
 	return exp(-r*expiry)*rollingSum/double(nReps);
